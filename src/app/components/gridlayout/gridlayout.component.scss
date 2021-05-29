@@ -1,0 +1,16 @@
+.grey-background{
+    background: #ccc;
+    padding: 15px;
+    margin: 2px;
+    
+    .emplty-box{
+        height: 40px;
+        width: 40px;
+        border: 1px solid #555;
+        padding: 2px;
+        background: #fff;
+    }
+    .dragtable{
+        border-spacing: 5px;
+    }
+}

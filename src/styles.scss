@@ -1,0 +1,93 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+.btn-group {
+    border: 1px solid #333;
+    margin-top: 10px;
+}
+.b-right {
+    border-right: 1px solid #333;
+}
+.draggableElement {
+    display: inline-block;
+    border: 1px dashed #333;
+    height: 100px;
+    width: 100px;
+    margin: auto;
+    margin-top: 10px;
+}
+.draggableElementText{
+    display: inline-block;
+    margin: auto;
+    margin-top: 10px;
+    font-size: 11px;
+    color: #2D2F39;
+    font-weight: 600;
+    text-align: left;
+}
+.lockers {
+    background: #045696;
+    position: relative;
+}
+.gridSterBlock {
+    background: #045696;
+    border: 4px solid #15aeef;
+}
+.lockerStatus {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    min-width: 25px;
+    min-height: 10px;
+    border-radius: 5px;
+}
+.lockerStatusSpan {
+    display: inline-block;
+    min-width: 25px;
+    min-height: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-left: 20px;
+}
+.b-white {
+    background: #fff;
+}
+.b-yellow {
+    background: #fdbc2c;
+}
+.b-red {
+    background: #fd5e57;
+}
+.b-green {
+    background: #28c741;
+}
+.b-grey{
+    background: #B9B9B9;
+}
+.locker-border {
+    border: 2px solid #15aeef;
+}
+.kisoskBlock.gridSterBlock,
+.kisosk.draggableElement {
+    background: url("../src/assets/lockerkiosk.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
+}
+.kisosk.draggableElement,
+.atmMachine.draggableElement {
+    height: 280px !important;
+}
+.rentSellerBlock.gridSterBlock,
+.atmMachine.draggableElement {
+    background: url("../src/assets/rentersell.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
+}
+.infoBlock {
+    color: #828D92;
+    font-size: 12px;
+    margin-left: 10%;
+    margin-top: 20px;
+}

@@ -1,0 +1,12 @@
+
+
+
+  <gridster [options]="options" >
+    <gridster-item [item]="item" [ngClass]="item.layoutClass" *ngFor="let item of dashboard" (click)="checkItem(item)">
+      <div *ngIf="item.status" class="lockerStatus" [ngClass]="item.status" ></div>
+    </gridster-item>
+  </gridster>
+  <div class="infoBlock">
+    <span class="lockerStatusSpan b-green"></span> Avaiable <span class="lockerStatusSpan b-red"></span> Reserved  <span class="lockerStatusSpan b-yellow"></span> In Use  <span class="lockerStatusSpan b-grey"></span> Disabled 
+    <span class="float-end">Note : To remove lockers, please drag them out of the grid</span>
+  </div>

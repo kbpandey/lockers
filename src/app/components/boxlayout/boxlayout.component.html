@@ -1,0 +1,60 @@
+<div class="box-layout-conatiner">
+    <div class="btn-group">
+        <button type="button" class="b-right  btn btn-info">Lockers</button>
+        <button type="button" class="btn btn-default">Template</button>
+        
+      </div>
+      <div class="d-flex">
+        <div class="kisosk draggableElement" draggable="true" (dragstart)="drag($event, 'kisosk')">
+        </div>
+        <div class="atmMachine draggableElement" draggable="true" (dragstart)="drag($event, 'rentSeller')">
+        </div>    
+      </div>
+    <div class="d-flex">
+      <div class="draggableElementText" >
+        Kiosk
+        <p>76 x 18 x 15.25</p>
+      </div>
+      <div class="draggableElementText">
+        Rent Seller
+        <p>76 x 18 x 15.25</p>
+      </div>    
+    </div>
+      <div class="d-flex">
+        <div class="smLocker  locker-border lockers draggableElement" draggable="true" (dragstart)="drag($event , 'smlocker')">
+          <div class="lockerStatus b-white"></div>
+        </div>
+        <div class="mdLocker locker-border lockers draggableElement" draggable="true" (dragstart)="drag($event, 'mdLocker')">
+          <div class="lockerStatus b-red"></div>
+        </div>    
+      </div>
+      <div class="d-flex">
+        <div class="draggableElementText" >
+          Small Locker
+          <p>76 x 18 x 15.25</p>
+        </div>
+        <div class="draggableElementText">
+          Med Locker
+          <p>76 x 18 x 15.25</p>
+        </div>    
+      </div>
+      <div class="d-flex">
+        <div class="lgLocker locker-border lockers draggableElement" draggable="true" (dragstart)="drag($event, 'lgLocker')">
+          <div class="lockerStatus b-green"></div>
+        </div>
+        <div class="xlLocker locker-border lockers draggableElement" draggable="true" (dragstart)="drag($event, 'xlLocker')">
+          <div class="lockerStatus b-yellow"></div>
+        </div>    
+      </div>
+      <div class="d-flex">
+        <div class="draggableElementText" >
+          Large Locker
+          <p>76 x 18 x 15.25</p>
+        </div>
+        <div class="draggableElementText">
+          XL Locker
+          <p>76 x 18 x 15.25</p>
+        </div>    
+      </div>
+</div>
+

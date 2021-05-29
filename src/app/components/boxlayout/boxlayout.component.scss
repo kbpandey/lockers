@@ -1,0 +1,45 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+.box-layout-conatiner {
+    padding: 8px;
+
+    .btn-group {
+        border: 1px solid #333;
+        margin-top: 10px;
+    }
+    .b-right {
+        border-right: 1px solid #333;
+    }
+    .draggableElement {
+        display: inline-block;
+        border: 1px dashed #333;
+        height: 100px;
+        width: 100px;
+    }
+    .lockers {
+        background: #045696;
+        position: relative;
+    }
+    .lockerStatus {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        min-width: 25px;
+        min-height: 10px;
+        border-radius: 5px;
+    }
+    .b-white {
+        background: #fff;
+    }
+    .b-yellow {
+        background: #fdbc2c;
+    }
+    .b-red {
+        background: #fd5e57;
+    }
+    .b-green {
+        background: #28c741;
+    }
+    .locker-border {
+        border: 2px solid #15aeef;
+    }
+}
