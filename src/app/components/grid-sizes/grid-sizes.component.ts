@@ -43,11 +43,13 @@ export class GridSizesComponent implements OnInit {
       maxItemArea: 10,
       minItemArea: 1,
       defaultItemCols: 1,
-      defaultItemRows: 1
+      defaultItemRows: 1,
+      margin:10,
+      outerMargin:false,
+      disablePushOnDrag: true,
     };
 
     this.dashboard = [
-     
 
     ];
     this.options.emptyCellDropCallback = this.newWidgetCallback.bind(this);

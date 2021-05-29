@@ -1,7 +1,9 @@
 
 
-
-  <gridster [options]="options" >
+  <gridster [options]="options">
+    <div class="kiosk-grid">
+                        
+    </div>      
     <gridster-item [item]="item" [ngClass]="item.layoutClass" *ngFor="let item of dashboard" (click)="checkItem(item)">
       <div *ngIf="item.status" class="lockerStatus" [ngClass]="item.status" ></div>
     </gridster-item>
