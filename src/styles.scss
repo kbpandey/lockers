@@ -11,11 +11,23 @@
 .draggableElement {
     display: inline-block;
     border: 1px dashed #333;
-    height: 100px;
     width: 100px;
     margin: auto;
     margin-top: 10px;
 }
+.smLocker {
+    height: 100px;
+}
+.mdLocker {
+    height: 125px;
+}
+.lgLocker {
+    height: 150px;
+}
+.xlLocker {
+    height: 175px;
+}
+
 .draggableElementText{
     display: inline-block;
     margin: auto;

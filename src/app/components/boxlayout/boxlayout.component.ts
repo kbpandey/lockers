@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./boxlayout.component.scss']
 })
 export class BoxlayoutComponent implements OnInit {
+  displayTemplates: string = 'lockers';
 
   constructor() { }
 
@@ -16,5 +17,9 @@ export class BoxlayoutComponent implements OnInit {
     console.log('dragged',_esa)
     
   }
+  displayTemplateLockers(displayType:string) {
+    this.displayTemplates = displayType
+  }
+  
 
 }

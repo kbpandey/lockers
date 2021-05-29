@@ -104,6 +104,52 @@ export class GridSizesComponent implements OnInit {
       case 'xlLocker':
         this.dashboard.push({  x: item.x, y: item.y, cols: 1, rows: 5, layoutClass:'xlLockerBlock gridSterBlock' , status: 'b-yellow' });  
       break;
+      case 'sampleTemplate1':
+        this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 10, layoutClass:'kisoskBlock gridSterBlock' });
+        this.dashboard.push({  x: 1, y: 0, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' }); 
+        this.dashboard.push({  x: 1, y: 2, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' }); 
+        this.dashboard.push({  x: 1, y: 4, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' }); 
+        this.dashboard.push({  x: 1, y: 6, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' });
+        this.dashboard.push({  x: 1, y: 8, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' }); 
+        this.dashboard.push({  x: 2, y: 0, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' });
+        this.dashboard.push({  x: 2, y: 2, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' });
+        this.dashboard.push({  x: 2, y: 5, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' }); 
+        this.dashboard.push({  x: 2, y: 8, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' });
+        this.dashboard.push({  x: 3, y: 0, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' }); 
+        this.dashboard.push({  x: 3, y: 3, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' });
+        this.dashboard.push({  x: 3, y: 6, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' }); 
+        this.dashboard.push({  x: 4, y: 0, cols: 1, rows: 10, layoutClass:'rentSellerBlock gridSterBlock'});
+        this.dashboard.push({  x: 5, y: 0, cols: 1, rows: 4, layoutClass:'lgLockerBlock gridSterBlock', status: 'b-green' }); 
+        this.dashboard.push({  x: 5, y: 4, cols: 1, rows: 4, layoutClass:'lgLockerBlock gridSterBlock', status: 'b-green' });
+        this.dashboard.push({  x: 5, y: 8, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' });      
+        this.dashboard.push({  x: 6, y: 0, cols: 1, rows: 4, layoutClass:'lgLockerBlock gridSterBlock', status: 'b-green' }); 
+        this.dashboard.push({  x: 6, y: 4, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' });
+        this.dashboard.push({  x: 6, y: 8, cols: 1, rows: 4, layoutClass:'lgLockerBlock gridSterBlock', status: 'b-green' });
+        this.dashboard.push({ x: 7, y: 0, cols: 1, rows: 10, layoutClass:'kisoskBlock gridSterBlock' });
+      break;
+      case 'sampleTemplate2':
+        this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 10, layoutClass:'kisoskBlock gridSterBlock' });
+        this.dashboard.push({  x: 1, y: 0, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' }); 
+        this.dashboard.push({  x: 1, y: 2, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' }); 
+        this.dashboard.push({  x: 1, y: 4, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' }); 
+        this.dashboard.push({  x: 1, y: 6, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' });
+        this.dashboard.push({  x: 1, y: 8, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' }); 
+        this.dashboard.push({  x: 2, y: 0, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' });
+        this.dashboard.push({  x: 2, y: 2, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' });
+        this.dashboard.push({  x: 2, y: 5, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' }); 
+        this.dashboard.push({  x: 2, y: 8, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' });
+        this.dashboard.push({  x: 3, y: 0, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' }); 
+        this.dashboard.push({  x: 3, y: 3, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' });
+        this.dashboard.push({  x: 3, y: 6, cols: 1, rows: 3, layoutClass:'mdLockerBlock gridSterBlock', status: 'b-red' }); 
+        this.dashboard.push({  x: 4, y: 0, cols: 1, rows: 10, layoutClass:'rentSellerBlock gridSterBlock'});
+        this.dashboard.push({  x: 5, y: 0, cols: 1, rows: 4, layoutClass:'lgLockerBlock gridSterBlock', status: 'b-green' }); 
+        this.dashboard.push({  x: 5, y: 4, cols: 1, rows: 4, layoutClass:'lgLockerBlock gridSterBlock', status: 'b-green' });
+        this.dashboard.push({  x: 5, y: 8, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' });      
+        this.dashboard.push({  x: 6, y: 0, cols: 1, rows: 4, layoutClass:'lgLockerBlock gridSterBlock', status: 'b-green' }); 
+        this.dashboard.push({  x: 6, y: 4, cols: 1, rows: 2, layoutClass:'smLockerBlock gridSterBlock', status: 'b-yellow' });
+        this.dashboard.push({  x: 6, y: 8, cols: 1, rows: 4, layoutClass:'lgLockerBlock gridSterBlock', status: 'b-green' });
+        this.dashboard.push({ x: 7, y: 0, cols: 1, rows: 10, layoutClass:'kisoskBlock gridSterBlock' });
+      break;
     }
     console.log(item);
   }
