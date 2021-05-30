@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { GridSizesComponent } from './components/grid-sizes/grid-sizes.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +10,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'locker-dashboard';
+  modalService!: NgbModal;
+  parentSubject:Subject<any> = new Subject();
+
+  gridComponent: GridSizesComponent = new GridSizesComponent(this.modalService);
+  
+  
+  
+  loadTemplate(datastore: any) {
+    console.log('sasadad', datastore)
+    console.log(datastore.length)
+    this.parentSubject.next(datastore);
+  }
+  
 }

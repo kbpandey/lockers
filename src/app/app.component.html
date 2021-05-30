@@ -12,14 +12,14 @@
 </style>
 
 <!-- Toolbar -->
-<div class="toolbar" role="banner">
+<div class="toolbar" role="banner" >
   <div class="d-flex height-full">
     <div class="col-sm-10 height-full" style="margin: 5px;">
       <!--<app-gridlayout class=""></app-gridlayout>-->
-      <app-grid-sizes></app-grid-sizes>
+      <app-grid-sizes [parentSubject]="parentSubject" ></app-grid-sizes>
     </div>
     <div class="col-sm-2 text-center"> 
-      <app-boxlayout ></app-boxlayout>
+      <app-boxlayout (templateData)="loadTemplate($event)"></app-boxlayout>
     </div>
     
   </div>

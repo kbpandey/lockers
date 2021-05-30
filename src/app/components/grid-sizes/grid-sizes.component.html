@@ -1,11 +1,33 @@
-
+<ng-template #editContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Locker</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+     
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Locker Number : <input class="form-control" type="number" (keyup)="onKeyup($event)" /> 
+    started <select (change)="onChange($event)" class="form-control">
+      <option>Available</option>
+      <option>In Use</option>
+      <option>Reserved</option>
+      <option>Disabled</option>
+    </select>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" data-dismiss="modal" (click)="closeEditPanel(selectedItem)">Close</button>
+  </div>
+</ng-template>
 
   <gridster [options]="options">
     <div class="kiosk-grid">
                         
     </div>      
-    <gridster-item [item]="item" [ngClass]="item.layoutClass" *ngFor="let item of dashboard" (click)="checkItem(item)">
+    <gridster-item [item]="item" [ngClass]="item.layoutClass" *ngFor="let item of dashboard" >
       <div *ngIf="item.status" class="lockerStatus" [ngClass]="item.status" ></div>
+      <div *ngIf="item.status"><button (click)="editButton(item, editContent)">E</button></div>
+      <p class="lockerNumber">{{item.lockerNumber}}</p>
     </gridster-item>
   </gridster>
   <div class="infoBlock">

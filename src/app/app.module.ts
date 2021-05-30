@@ -6,6 +6,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { GridlayoutComponent } from './components/gridlayout/gridlayout.component';
 import { BoxlayoutComponent } from './components/boxlayout/boxlayout.component';
 import { GridSizesComponent } from './components/grid-sizes/grid-sizes.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { GridSizesComponent } from './components/grid-sizes/grid-sizes.component
   ],
   imports: [
     BrowserModule,
-    GridsterModule 
+    GridsterModule,
+    NgbModule 
   ],
   providers: [],
   bootstrap: [AppComponent]
