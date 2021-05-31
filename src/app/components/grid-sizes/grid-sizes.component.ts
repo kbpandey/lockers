@@ -199,18 +199,12 @@ export class GridSizesComponent implements OnInit {
   }
   saveTemplateData() {
     console.log(this.dashboard)
-    let counter = 0
-    this.dashboard.forEach((element)=>{
-      if(element.layoutClass.contains('kisoskBlock gridSterBlock') || element.layoutClass.contains('rentSellerBlock gridSterBlock')) {
-        counter++
-      }
-    })
     let PreviousTemplate:any = sessionStorage.getItem('savedTemplate')!==null? sessionStorage.getItem('savedTemplate'): [] ;
     PreviousTemplate =PreviousTemplate.length >0? JSON.parse(PreviousTemplate):[]
-    debugger
     let  tempTemplateData:any = {}
       tempTemplateData.templateName = this.templateName;
       tempTemplateData.lockersList = this.dashboard;
+      tempTemplateData.railClass = this.returnRails()
       
     if(PreviousTemplate===null) {
       let  allTemplates = [];
@@ -222,6 +216,23 @@ export class GridSizesComponent implements OnInit {
       sessionStorage.setItem('savedTemplate', JSON.stringify(PreviousTemplate))
     }
     this.modalService.dismissAll()
+  }
+  returnRails() {
+    let counter = 0;
+    let clsName = 'singleRail'
+    this.dashboard.forEach((lockers)=>{
+      if(lockers.layoutClass==='kisoskBlock gridSterBlock'||lockers.layoutClass==='rentSellerBlock gridSterBlock') {
+        counter = counter+1
+      }
+    })
+    if(counter <=1){
+      clsName = '../../../assets/singleRail.jpeg'
+    } else if(counter ===2){
+      clsName = '../../../assets/dualRail.jpeg'
+    } else {
+      clsName = '../../../assets/tripleRail.jpeg'
+    }
+    return clsName;
   }
   newWidgetCallback(event: any, item: any): any {
     // do stuff / save to server / etc

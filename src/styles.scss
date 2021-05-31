@@ -110,7 +110,22 @@
     margin-left: 10%;
     margin-top: 20px;
 }
-
+.singleRail{
+    background: url('./assets/singlerail.jpeg')
+}
+.dualRail{
+    background: url('./assets/dualrail.jpeg') !important;
+    width: 80%;
+    height: 200px;
+}
+.tripleRail{
+    background: url('./assets/triplerail.jpeg')
+}
+.templateClass {
+height:200px;
+padding:0 10px;
+width:98%;
+}
 gridster{
     background: #fff;
 }

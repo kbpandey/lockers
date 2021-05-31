@@ -14,7 +14,7 @@ export class BoxlayoutComponent implements OnInit {
 
   ngOnInit(): void {
     const lockersData = new BoxlayoutService()
-    this.lockersLists = lockersData.GetLockerSizes()
+    this.lockersLists = lockersData.GetLockerSizes();
    
     let templateDataS:any = sessionStorage.getItem('savedTemplate')!==null? sessionStorage.getItem('savedTemplate') : [];
     this.savedTemplates = templateDataS.length > 0 ? JSON.parse(templateDataS) : []

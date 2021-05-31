@@ -88,10 +88,10 @@
         <p>76 x 18 x 15.25</p>
       </div>
     </div>
-    <div *ngFor="let user of savedTemplates; index as i; first as isFirst" style="width: 50%; display: inline-block;">
-      <div class="smLocker locker-border lockers draggableElement"  draggable="true"
+    <div *ngFor="let user of savedTemplates; index as i; first as isFirst">
+      <div class="locker-border templateClass"   draggable="true"
         (dragstart)="drag($event , 'templates', user)">
-        <div class="lockerStatus b-white"></div>
+        <img src="{{user.railClass}}" style="width: 100%; height: 100%;">
       </div>
       <div class="draggableElementText">
         {{user.templateName}}
