@@ -7,7 +7,7 @@ import { LockerSizes, LockerTemplates, LockerLayout,  } from '../gridlayout/lock
 export class BoxlayoutService {
 
   constructor() { }
-
+  
   // /api/services/app/LockerSize/GetLockerSizes
   GetLockerSizes() : LockerSizes[]{
     return [
@@ -117,7 +117,8 @@ export class BoxlayoutService {
       }
     ];
   }
-
+  LockersData = this.GetLockerSizes();
+  templateData = this.GetTemplates();
   // /api/services/app/Template/UpdateTemplate
   SaveLockerTemplate(update: LockerTemplates){
 

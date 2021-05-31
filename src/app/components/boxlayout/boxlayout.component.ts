@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-
+import { BoxlayoutService } from './boxlayout.service'
 @Component({
   selector: 'app-boxlayout',
   templateUrl: './boxlayout.component.html',
@@ -8,20 +8,60 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 export class BoxlayoutComponent implements OnInit {
   displayTemplates: string = 'lockers';
   @Output() templateData = new EventEmitter<any>();
+  lockersLists: any = []
+  savedTemplates:any = []
   constructor() { }
 
   ngOnInit(): void {
-  }
-  drag(_esa: any, itemName:string):void {
-    sessionStorage.setItem('box',itemName)
-    console.log('dragged',_esa)
+    const lockersData = new BoxlayoutService()
+    this.lockersLists = lockersData.GetLockerSizes()
+   
+    let templateDataS:any = sessionStorage.getItem('savedTemplate')!==null? sessionStorage.getItem('savedTemplate') : [];
+    this.savedTemplates = templateDataS.length > 0 ? JSON.parse(templateDataS) : []
+
+    this.lockersLists.forEach((lockers: any) => {
+
+      switch (lockers.lockerName) {
+        case 'Kiosk':
+          lockers.layoutClass = 'kisoskBlock gridSterBlock';
+          break;
+        case 'Rent Seller':
+          lockers.layoutClass = 'rentSellerBlock gridSterBlock';
+          break;
+        case 'Small Locker':
+          lockers.layoutClass = 'smLockerBlock gridSterBlock';
+          break;
+        case 'Med Locker':
+          lockers.layoutClass = 'mdLockerBlock gridSterBlock';
+          break;
+        case '"Large Locker':
+          lockers.layoutClass = 'lgLockerBlock gridSterBlock';
+          break;
+        case 'XL Locker':
+          lockers.layoutClass = 'xlLockerBlock gridSterBlock';
+          break;
+      }
+      let baseheight=100
+      const extraHeight = (lockers.rows-1) * 25
+      const finalHeight = baseheight + extraHeight;
+      lockers.cssHeight = finalHeight+'px'
+      lockers.status = 'b-green';
+    });
     
   }
-  displayTemplateLockers(displayType:string) {
+
+  drag(_esa: any, itemName: string, item:any): void {
+    sessionStorage.setItem('box', itemName)
+    if(itemName==='templates')
+    sessionStorage.setItem('contentData', JSON.stringify(item.lockersList))
+    console.log('dragged', _esa)
+
+  }
+  displayTemplateLockers(displayType: string) {
     this.displayTemplates = displayType
   }
   loadTemplate() {
-    let  dataStores =[{ x: 0, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' },
+    let dataStores = [{ x: 0, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' },
     { x: 1, y: 0, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' },
     { x: 1, y: 2, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' },
     { x: 1, y: 4, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' },

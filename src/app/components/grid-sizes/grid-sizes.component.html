@@ -1,24 +1,4 @@
-<ng-template #editContent let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">Edit Locker</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-     
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    Locker Number : <input class="form-control" type="number" (keyup)="onKeyup($event)" /> 
-    started <select (change)="onChange($event)" class="form-control">
-      <option>Available</option>
-      <option>In Use</option>
-      <option>Reserved</option>
-      <option>Disabled</option>
-    </select>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-light" data-dismiss="modal" (click)="closeEditPanel(selectedItem)">Close</button>
-  </div>
-</ng-template>
+
 
   <gridster [options]="options">
     <div class="kiosk-grid">
@@ -34,3 +14,48 @@
     <span class="lockerStatusSpan b-green"></span> Avaiable <span class="lockerStatusSpan b-red"></span> Reserved  <span class="lockerStatusSpan b-yellow"></span> In Use  <span class="lockerStatusSpan b-grey"></span> Disabled 
     <span class="float-end">Note : To remove lockers, please drag them out of the grid</span>
   </div>
+  <div> <button class="btn btn-primary" (click)="saveDashboard(dashboard, SaveContent)">  Save</button></div>
+
+  <!--Edit Modal-->
+  <ng-template #editContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Edit Locker</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+       
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      Locker Number : <input class="form-control" type="number" (keyup)="onKeyup($event)" /> 
+      started <select (change)="onChange($event)" class="form-control">
+        <option>Available</option>
+        <option>In Use</option>
+        <option>Reserved</option>
+        <option>Disabled</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
+      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="closeEditPanel(selectedItem)">Ok</button>
+  
+    </div>
+  </ng-template>
+  <!-- Save Modal-->
+  <ng-template #SaveContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Save Locker</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+       
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      Template Name : <input class="form-control" type="text" (keyup)="saveKeyUp($event)" /> 
+      
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal" >cancel</button>
+      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="saveTemplateData()">Ok</button>
+  
+    </div>
+  </ng-template>

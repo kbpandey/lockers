@@ -3,6 +3,7 @@ import { Input, ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation  }
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
+import { templateJitUrl } from '@angular/compiler';
 
 @Component({
   selector: 'app-grid-sizes',
@@ -12,6 +13,11 @@ import { Subject } from 'rxjs';
 })
 export class GridSizesComponent implements OnInit {
   @Input()  parentSubject!: Subject<any>;
+  templateName:string = '';
+  templates:[] = [];
+  savedTemplates:any = []
+  tempStatus:string = '';
+  tempLockerNumber:number = 0
   dashboard: Array<GridsterItem> = [];
   minColums: number = 10;
   maxColumns: number = 10;
@@ -93,10 +99,11 @@ export class GridSizesComponent implements OnInit {
     this.dashboard = [
 
     ];
+    let templateDataS:any = sessionStorage.getItem('savedTemplate')!==null? sessionStorage.getItem('savedTemplate') : [];
+    this.savedTemplates = templateDataS.length > 0 ? JSON.parse(templateDataS) : []
     var self = this
     this.parentSubject.subscribe(event => {
       self.dashboard = event;
-      debugger
       console.log(event)
     });
     this.options.emptyCellDropCallback = this.newWidgetCallback.bind(this);
@@ -128,25 +135,29 @@ export class GridSizesComponent implements OnInit {
     switch (data.target.value) {
       case 'Available':
         console.log(data.target.value)
-        this.selectedItem.status = 'b-green';
+        this.tempStatus = 'b-green';
         break
       case 'In Use':
         console.log(data.target.value)
-        this.selectedItem.status = 'b-yellow';
+        this.tempStatus = 'b-yellow';
         break
       case 'Reserved':
         console.log(data.target.value)
-        this.selectedItem.status = 'b-red';
+        this.tempStatus = 'b-red';
         break
       case 'Disabled':
         console.log(data.target.value)
-        this.selectedItem.status = 'b-grey';
+        this.tempStatus = 'b-grey';
         break
     }
      
   }
   onKeyup(data: any) {
-    this.selectedItem.lockerNumber = data.target.value
+
+    this.tempLockerNumber = data.target.value
+  }
+  saveKeyUp(data:any) {
+    this.templateName = data.target.value;  
   }
   deleteButton(item: any) {
     console.log(item)
@@ -159,6 +170,8 @@ export class GridSizesComponent implements OnInit {
   }
   closeEditPanel(selectedData: any) {
     console.log('seletedData', selectedData, this.dashboard)
+    this.selectedItem.status = this.tempStatus;
+    this.selectedItem.lockerNumber = this.tempLockerNumber
     this.dashboard.forEach((element: GridsterItem, index) => {
       console.log(element)
       if (selectedData.x === element.x && selectedData.y === element.y) {
@@ -174,17 +187,50 @@ export class GridSizesComponent implements OnInit {
     console.log(item)
   }
   loadTemplate(item: any) {
-    debugger
     console.log('load template', this)
     item.forEach((element: GridsterItem) => {
       this.dashboard.push(element)
     });
     console.log(this.dashboard)
   }
+  saveDashboard(data:any, content: any) {
+    console.log(data)
+    this.modalService.open(content);
+  }
+  saveTemplateData() {
+    console.log(this.dashboard)
+    let counter = 0
+    this.dashboard.forEach((element)=>{
+      if(element.layoutClass.contains('kisoskBlock gridSterBlock') || element.layoutClass.contains('rentSellerBlock gridSterBlock')) {
+        counter++
+      }
+    })
+    let PreviousTemplate:any = sessionStorage.getItem('savedTemplate')!==null? sessionStorage.getItem('savedTemplate'): [] ;
+    PreviousTemplate =PreviousTemplate.length >0? JSON.parse(PreviousTemplate):[]
+    debugger
+    let  tempTemplateData:any = {}
+      tempTemplateData.templateName = this.templateName;
+      tempTemplateData.lockersList = this.dashboard;
+      
+    if(PreviousTemplate===null) {
+      let  allTemplates = [];
+      allTemplates.push(tempTemplateData)
+      sessionStorage.setItem('savedTemplate', JSON.stringify(allTemplates))
+     // PreviousTemplate.templates.push(this.dashboard)
+    } else {
+      PreviousTemplate.push(tempTemplateData);
+      sessionStorage.setItem('savedTemplate', JSON.stringify(PreviousTemplate))
+    }
+    this.modalService.dismissAll()
+  }
   newWidgetCallback(event: any, item: any): any {
     // do stuff / save to server / etc
-    debugger
     let deviceType = sessionStorage.getItem('box')
+    if(deviceType==='templates') {
+      let  datas:any = sessionStorage.getItem('contentData')
+      console.log(JSON.parse(datas))
+      this.dashboard = JSON.parse(datas)
+    }
     switch (deviceType) {
       case 'kisosk':
         this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' });
@@ -205,28 +251,29 @@ export class GridSizesComponent implements OnInit {
         this.dashboard.push({ x: item.x, y: item.y, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow' });
         break;
       case 'sampleTemplate1':
-        this.dashboard = []
-        this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' });
-        this.dashboard.push({ x: 1, y: 0, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 1, y: 2, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 1, y: 4, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 1, y: 6, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 1, y: 8, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 2, y: 0, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 2, y: 2, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 2, y: 5, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 2, y: 8, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 3, y: 0, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 3, y: 3, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 3, y: 6, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 4, y: 0, cols: 1, rows: 10, layoutClass: 'rentSellerBlock gridSterBlock' });
-        this.dashboard.push({ x: 5, y: 0, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        this.dashboard.push({ x: 5, y: 4, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        this.dashboard.push({ x: 5, y: 8, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 6, y: 0, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        this.dashboard.push({ x: 6, y: 4, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 6, y: 8, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        this.dashboard.push({ x: 7, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' });
+        this.dashboard =[{x:7,y:4,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green'}
+          ,{x:6,y:2,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green'}
+          ,{x:5,y:5,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'}
+          ,{x:5,y:3,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:7,y:0,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green'},
+          {x:1,y:0,cols:1,rows:10,layoutClass: 'kisoskBlock gridSterBlock'},
+          {x:4,y:0,cols:1,rows:10,layoutClass: 'rentSellerBlock gridSterBlock'},
+          {x:3,y:0,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red'},
+          {x:9,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:9,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:8,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:6,y:0,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:8,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:7,y:8,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:5,y:0,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red'},
+          {x:6,y:6,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green'},
+          {x:5,y:7,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red'},
+          {x:2,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:2,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:3,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:3,y:3,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:0,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
+          {x:0,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow'}]
         break;
       case 'sampleTemplate2':
         this.dashboard = []
