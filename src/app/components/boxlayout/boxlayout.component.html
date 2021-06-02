@@ -71,7 +71,7 @@
     </div>
   </div>
   <ng-template #templatesData>
-    <div class="d-flex">
+    <!-- <div class="d-flex">
       <div class="kisosk draggableElement" draggable="true" (dragstart)="drag($event, 'sampleTemplate1', {})">
       </div>
       <div class="atmMachine draggableElement" draggable="true" (dragstart)="drag($event, 'sampleTemplate2',{})">
@@ -87,15 +87,15 @@
         Sample Template 2
         <p>76 x 18 x 15.25</p>
       </div>
-    </div>
-    <div *ngFor="let user of savedTemplates; index as i; first as isFirst">
-      <div class="locker-border templateClass"   draggable="true"
+    </div> -->
+    <div *ngFor="let user of savedTemplates; index as i; first as isFirst" style="padding-top:10px;">
+      <div class="templateClass"   draggable="true"
         (dragstart)="drag($event , 'templates', user)">
-        <img src="{{user.railClass}}" style="width: 100%; height: 100%;">
+        <img src="{{user.railClass}}">
       </div>
       <div class="draggableElementText">
         {{user.templateName}}
-        <p>30 x 30 x 15.25</p>
+        <p>Created On 31/05/2021</p>
         </div>
     </div>
     

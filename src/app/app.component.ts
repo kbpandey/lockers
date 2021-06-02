@@ -14,13 +14,15 @@ export class AppComponent {
   parentSubject:Subject<any> = new Subject();
 
   gridComponent: GridSizesComponent = new GridSizesComponent(this.modalService);
-  
-  
+  updatedValue: string = "";
   
   loadTemplate(datastore: any) {
     console.log('sasadad', datastore)
     console.log(datastore.length)
     this.parentSubject.next(datastore);
   }
-  
+
+  saveTemplateClicked(){
+    this.updatedValue = "template"
+  }
 }

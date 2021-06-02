@@ -1,17 +1,21 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnChanges, Input } from '@angular/core';
 import { BoxlayoutService } from './boxlayout.service'
 @Component({
   selector: 'app-boxlayout',
   templateUrl: './boxlayout.component.html',
   styleUrls: ['./boxlayout.component.scss']
 })
-export class BoxlayoutComponent implements OnInit {
+export class BoxlayoutComponent implements OnInit, OnChanges {
   displayTemplates: string = 'lockers';
+
+  @Input() updateType:string;
   @Output() templateData = new EventEmitter<any>();
   lockersLists: any = []
-  savedTemplates: any = []
+  savedTemplates:any = []
   standardSizes:number = 10
-  constructor() { }
+  constructor() {
+    this.updateType = "";
+   }
 
   ngOnInit(): void {
     const lockersData = new BoxlayoutService()
@@ -71,6 +75,15 @@ export class BoxlayoutComponent implements OnInit {
         })
       });
     });
+  }
+  loadTemplates(){
+    let templateDataS:any = sessionStorage.getItem('savedTemplate')!==null? sessionStorage.getItem('savedTemplate') : [];
+    this.savedTemplates = templateDataS.length > 0 ? JSON.parse(templateDataS) : []
+  }
+
+
+  ngOnChanges(changes: any) {
+    this.loadTemplates();
   }
   drag(_esa: any, itemName: string, item: any): void {
     sessionStorage.setItem('box', itemName)

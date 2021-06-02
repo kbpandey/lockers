@@ -1,4 +1,4 @@
-import { Input, ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Input, ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, EventEmitter, Output  } from '@angular/core';
 
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,12 +11,13 @@ import { Subject } from 'rxjs';
   encapsulation: ViewEncapsulation.None
 })
 export class GridSizesComponent implements OnInit {
-  @Input() parentSubject!: Subject<any>;
-  templateName: string = '';
-  templates: [] = [];
-  savedTemplates: any = []
-  tempStatus: string = '';
-  tempLockerNumber: number = 0
+  @Input()  parentSubject!: Subject<any>;
+  @Output() savetTemplateClick = new EventEmitter<any>();
+  templateName:string = '';
+  templates:[] = [];
+  savedTemplates:any = []
+  tempStatus:string = '';
+  tempLockerNumber:number = 0
   dashboard: Array<GridsterItem> = [];
   minColums: number = 15;
   maxColumns: number = 15;
@@ -214,6 +215,7 @@ export class GridSizesComponent implements OnInit {
       PreviousTemplate.push(tempTemplateData);
       sessionStorage.setItem('savedTemplate', JSON.stringify(PreviousTemplate))
     }
+    this.savetTemplateClick.emit();
     this.modalService.dismissAll()
   }
   convertToDbData(data: any) {
@@ -249,12 +251,12 @@ export class GridSizesComponent implements OnInit {
         counter = counter + 1
       }
     })
-    if (counter <= 1) {
-      clsName = '../../../assets/singleRail.jpeg'
-    } else if (counter === 2) {
+    if(counter <=1){
+      clsName = '../../../assets/singlerail.jpeg'
+    } else if(counter ===2){
       clsName = '../../../assets/dualrail.jpeg'
     } else {
-      clsName = '../../../assets/tripleRail.jpeg'
+      clsName = '../../../assets/triplerail.jpeg'
     }
     return clsName;
   }
