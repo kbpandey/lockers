@@ -1,9 +1,9 @@
 
 
   <gridster [options]="options">
-    <div class="kiosk-grid">
+    <!-- <div class="kiosk-grid">
                         
-    </div>      
+    </div>       -->
     <gridster-item [item]="item" [ngClass]="item.layoutClass" *ngFor="let item of dashboard" >
       <div *ngIf="item.status" class="lockerStatus" [ngClass]="item.status" ></div>
       <div *ngIf="item.status"><button (click)="editButton(item, editContent)">E</button></div>

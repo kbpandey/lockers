@@ -15,35 +15,35 @@ export class BoxlayoutService {
         "id": 1,
         "lockerName": "Kiosk",
         "height": 100,
-        "width": 100,
-        "lockerTypeId": 0
+        "width": 18,
+        "lockerTypeId": 1
       },
       {
         "id": 2,
         "lockerName": "Rent Seller",
         "height": 100,
-        "width": 100,
-        "lockerTypeId": 0
+        "width": 10,
+        "lockerTypeId": 2
       },
       {
         "id": 3,
         "lockerName": "Small Locker",
-        "height": 1,
-        "width": 1,
+        "height": 9.75,
+        "width": 9.5,
         "lockerTypeId": 0
       },
       {
         "id": 4,
         "lockerName": "Med Locker",
-        "height": 2,
-        "width": 1,
+        "height": 11.41,
+        "width": 9.5,
         "lockerTypeId": 0
       },
       {
         "id": 5,
         "lockerName": "Large Locker",
         "height": 3,
-        "width": 1,
+        "width": 2,
         "lockerTypeId": 0
       },
       {

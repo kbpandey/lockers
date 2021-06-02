@@ -60,7 +60,7 @@
       </div>
     </div>
     <div *ngFor="let user of lockersLists; index as i; first as isFirst" style="width: 50%; display: inline-block;">
-      <div class="smLocker locker-border lockers draggableElement"  draggable="true"
+      <div class="locker-border lockers draggableElement"  [ngClass]="user.layoutClass" [style.height.px]="getHeight(user.rows)" draggable="true"
         (dragstart)="drag($event , 'smlocker', user)">
         <div class="lockerStatus b-white"></div>
       </div>

@@ -10,6 +10,7 @@ export class BoxlayoutComponent implements OnInit {
   @Output() templateData = new EventEmitter<any>();
   lockersLists: any = []
   savedTemplates: any = []
+  standardSizes:number = 10
   constructor() { }
 
   ngOnInit(): void {
@@ -19,9 +20,9 @@ export class BoxlayoutComponent implements OnInit {
     let convertedLockersData = this.convertData(testdata);
     let templateDataS: any = sessionStorage.getItem('savedTemplate') !== null ? sessionStorage.getItem('savedTemplate') : [];
     this.savedTemplates = templateDataS.length > 0 ? JSON.parse(templateDataS) : []
-    
+
     this.lockersLists.forEach((lockers: any) => {
-      lockers.layoutClass = this.getLayoutClass(lockers.lockerName)
+      lockers.layoutClass = this.getLayoutClass(lockers)
       let baseheight = 100
       const extraHeight = (lockers.rows - 1) * 25
       const finalHeight = baseheight + extraHeight;
@@ -30,37 +31,39 @@ export class BoxlayoutComponent implements OnInit {
     });
 
   }
-  getLayoutClass(lockerName: any) {
+  getLayoutClass(lockers: any) {
     let layoutClass = ''
-    switch (lockerName) {
-      case 'Kiosk':
+    switch (lockers.typeId) {
+      case 1:
         layoutClass = 'kisoskBlock gridSterBlock';
         break;
-      case 'Rent Seller':
+      case 2:
         layoutClass = 'rentSellerBlock gridSterBlock';
         break;
-      case 'Small Locker':
-        layoutClass = 'smLockerBlock gridSterBlock';
-        break;
-      case 'Med Locker':
-        layoutClass = 'mdLockerBlock gridSterBlock';
-        break;
-      case '"Large Locker':
-        layoutClass = 'lgLockerBlock gridSterBlock';
-        break;
-      case 'XL Locker':
-        layoutClass = 'xlLockerBlock gridSterBlock';
-        break;
+      case 0:
+        layoutClass = 'lockerBlock gridSterBlock';
+       
+        break
     }
     return layoutClass;
   }
+  getHeight(rows:any) {
+    let baseheight = 100
+    const extraHeight = (rows - 1) * 25
+    const finalHeight = baseheight + extraHeight;
+    return finalHeight;
+  }
+
   convertData(data: any) {
     let result: any = []
     data.forEach((element: { lockersList: any[]; }) => {
       element.lockersList.forEach((lockers: any) => {
         result.push({
-          x: lockers.xCoordinate, y: lockers.yCoordinate, cols: lockers.width,
-          rows: lockers.height, layoutClass: this.getLayoutClass(lockers.lockerNumber),
+          x: lockers.xCoordinate,
+          y: lockers.yCoordinate, 
+          cols: lockers.width / this.standardSizes,
+          rows: lockers.height / this.standardSizes, 
+          layoutClass: this.getLayoutClass(lockers),
           lockerNumber: lockers.lockerNumber, isRail: lockers.isRail,
           lockerStatusId: lockers.lockerStatusId, lockerSizeId: lockers.lockerSizeId,
           lockerId: lockers.lockerId,
@@ -72,8 +75,8 @@ export class BoxlayoutComponent implements OnInit {
   drag(_esa: any, itemName: string, item: any): void {
     sessionStorage.setItem('box', itemName)
     if (itemName === 'templates')
-    console.log('draggerd',item.lockersList)
-      sessionStorage.setItem('contentData', JSON.stringify(item.lockersList))
+      console.log('draggerd', item.lockersList)
+    sessionStorage.setItem('contentData', JSON.stringify(item.lockersList))
     console.log('dragged', _esa)
 
   }
