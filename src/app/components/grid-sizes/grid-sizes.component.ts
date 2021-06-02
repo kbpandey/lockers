@@ -3,7 +3,6 @@ import { Input, ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation  }
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { templateJitUrl } from '@angular/compiler';
 
 @Component({
   selector: 'app-grid-sizes',
@@ -25,7 +24,6 @@ export class GridSizesComponent implements OnInit {
   maxRows: number = 10;
   selectedItem: any = []
   options: GridsterConfig = {
-    gridType: GridType.Fit,
     displayGrid: DisplayGrid.Always,
     enableEmptyCellClick: false,
     enableEmptyCellContextMenu: false,
@@ -170,11 +168,14 @@ export class GridSizesComponent implements OnInit {
   }
   closeEditPanel(selectedData: any) {
     console.log('seletedData', selectedData, this.dashboard)
+    
     this.selectedItem.status = this.tempStatus;
     this.selectedItem.lockerNumber = this.tempLockerNumber
     this.dashboard.forEach((element: GridsterItem, index) => {
       console.log(element)
+      debugger
       if (selectedData.x === element.x && selectedData.y === element.y) {
+        debugger
         this.dashboard[index] = selectedData;
       }
     });
@@ -203,9 +204,8 @@ export class GridSizesComponent implements OnInit {
     PreviousTemplate =PreviousTemplate.length >0? JSON.parse(PreviousTemplate):[]
     let  tempTemplateData:any = {}
       tempTemplateData.templateName = this.templateName;
-      tempTemplateData.lockersList = this.dashboard;
+      tempTemplateData.lockersList = this.convertToDbData(this.dashboard);
       tempTemplateData.railClass = this.returnRails()
-      
     if(PreviousTemplate===null) {
       let  allTemplates = [];
       allTemplates.push(tempTemplateData)
@@ -216,6 +216,27 @@ export class GridSizesComponent implements OnInit {
       sessionStorage.setItem('savedTemplate', JSON.stringify(PreviousTemplate))
     }
     this.modalService.dismissAll()
+  }
+  convertToDbData(data:any) {
+    debugger
+    let result:any = []
+    this.dashboard.forEach(lockers => {
+      result.push({
+        xCoordinate: lockers.x, yCoordinate: lockers.y, width: lockers.cols,
+        height: lockers.rows, layoutClass: lockers.layoutClass,
+        lockerNumber: lockers.lockerNumber, isRail: lockers.isRail,
+        lockerStatusId: lockers.status? this.convertToDbStatus(lockers.status): undefined, lockerSizeId: lockers.lockerSizeId,
+        lockerId: lockers.lockerId
+      })
+    });
+    return result
+  }
+  convertToDbStatus(data:any) {
+
+    console.log(data)
+    const statusArray = ['b-green', 'b-yellow', 'b-red','b-grey']
+    console.log(statusArray.indexOf(data))
+    return statusArray.indexOf(data)>-1 ? statusArray.indexOf(data): 0
   }
   returnRails() {
     let counter = 0;
@@ -228,23 +249,46 @@ export class GridSizesComponent implements OnInit {
     if(counter <=1){
       clsName = '../../../assets/singleRail.jpeg'
     } else if(counter ===2){
-      clsName = '../../../assets/dualRail.jpeg'
+      clsName = '../../../assets/dualrail.jpeg'
     } else {
       clsName = '../../../assets/tripleRail.jpeg'
     }
     return clsName;
+  }
+  covertedToGridCompat(data: any) {
+    debugger
+    let result: any = []
+      data.forEach((lockers: { xCoordinate: any; yCoordinate: any; width: any; height: any; lockerNumber: any; isRail: any; lockerStatusId: any; lockerSizeId: any; lockerId: any; layoutClass:any}) => {
+        result.push({
+          x: lockers.xCoordinate, 
+          y: lockers.yCoordinate,
+           cols: lockers.width,
+          rows: lockers.height, 
+          layoutClass: lockers.layoutClass,
+          lockerNumber: lockers.lockerNumber?lockers.lockerNumber:0,
+           isRail: lockers.isRail?true:false,
+          status : this.getLockerStatus(lockers.lockerStatusId),
+           lockerSizeId: lockers.lockerSizeId?lockers.lockerSizeId:1,
+          lockerId: lockers.lockerId?lockers.lockerId:1
+        })
+    });
+    return result;
+  }
+  getLockerStatus(status:any) {
+    const statusArray = ['b-green', 'b-yellow', 'b-red','b-grey']
+    return statusArray[status]
   }
   newWidgetCallback(event: any, item: any): any {
     // do stuff / save to server / etc
     let deviceType = sessionStorage.getItem('box')
     if(deviceType==='templates') {
       let  datas:any = sessionStorage.getItem('contentData')
-      console.log(JSON.parse(datas))
-      this.dashboard = JSON.parse(datas)
+      console.log('parsewda',JSON.parse(datas))
+      this.dashboard = this.covertedToGridCompat(JSON.parse(datas))
     }
     switch (deviceType) {
       case 'kisosk':
-        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' });
+        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock',  });
         break;
       case 'rentSeller':
         this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: 10, layoutClass: 'rentSellerBlock gridSterBlock' });
@@ -262,29 +306,29 @@ export class GridSizesComponent implements OnInit {
         this.dashboard.push({ x: item.x, y: item.y, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow' });
         break;
       case 'sampleTemplate1':
-        this.dashboard =[{x:7,y:4,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green'}
-          ,{x:6,y:2,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green'}
-          ,{x:5,y:5,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'}
-          ,{x:5,y:3,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:7,y:0,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green'},
-          {x:1,y:0,cols:1,rows:10,layoutClass: 'kisoskBlock gridSterBlock'},
-          {x:4,y:0,cols:1,rows:10,layoutClass: 'rentSellerBlock gridSterBlock'},
-          {x:3,y:0,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red'},
-          {x:9,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:9,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:8,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:6,y:0,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:8,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:7,y:8,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:5,y:0,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red'},
-          {x:6,y:6,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green'},
-          {x:5,y:7,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red'},
-          {x:2,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:2,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:3,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:3,y:3,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:0,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow'},
-          {x:0,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow'}]
+        this.dashboard =[{x:7,y:4,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green', lockerSizeId: 1,lockerNumber: 123456, }
+          ,{x:6,y:2,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green',lockerSizeId: 1,lockerNumber: 123456, }
+          ,{x:5,y:5,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456, }
+          ,{x:5,y:3,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow' ,lockerSizeId: 1,lockerNumber: 123456,},
+          {x:7,y:0,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:1,y:0,cols:1,rows:10,layoutClass: 'kisoskBlock gridSterBlock',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:4,y:0,cols:1,rows:10,layoutClass: 'rentSellerBlock gridSterBlock',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:3,y:0,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:9,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:9,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:8,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:6,y:0,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:8,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:7,y:8,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:5,y:0,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:6,y:6,cols:1,rows:4,layoutClass: 'lgLockerBlock gridSterBlock',status: 'b-green',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:5,y:7,cols:1,rows:3,layoutClass: 'mdLockerBlock gridSterBlock',status: 'b-red',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:2,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:2,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:3,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:3,y:3,cols:1,rows:2,layoutClass: 'smLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:0,y:5,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock',status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,},
+          {x:0,y:0,cols:1,rows:5,layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow',lockerSizeId: 1,lockerNumber: 123456,}]
         break;
       case 'sampleTemplate2':
         this.dashboard = []

@@ -9,51 +9,71 @@ export class BoxlayoutComponent implements OnInit {
   displayTemplates: string = 'lockers';
   @Output() templateData = new EventEmitter<any>();
   lockersLists: any = []
-  savedTemplates:any = []
+  savedTemplates: any = []
   constructor() { }
 
   ngOnInit(): void {
     const lockersData = new BoxlayoutService()
     this.lockersLists = lockersData.GetLockerSizes();
-   
-    let templateDataS:any = sessionStorage.getItem('savedTemplate')!==null? sessionStorage.getItem('savedTemplate') : [];
+    let testdata = lockersData.GetTemplates();
+    let convertedLockersData = this.convertData(testdata);
+    let templateDataS: any = sessionStorage.getItem('savedTemplate') !== null ? sessionStorage.getItem('savedTemplate') : [];
     this.savedTemplates = templateDataS.length > 0 ? JSON.parse(templateDataS) : []
-
+    
     this.lockersLists.forEach((lockers: any) => {
-
-      switch (lockers.lockerName) {
-        case 'Kiosk':
-          lockers.layoutClass = 'kisoskBlock gridSterBlock';
-          break;
-        case 'Rent Seller':
-          lockers.layoutClass = 'rentSellerBlock gridSterBlock';
-          break;
-        case 'Small Locker':
-          lockers.layoutClass = 'smLockerBlock gridSterBlock';
-          break;
-        case 'Med Locker':
-          lockers.layoutClass = 'mdLockerBlock gridSterBlock';
-          break;
-        case '"Large Locker':
-          lockers.layoutClass = 'lgLockerBlock gridSterBlock';
-          break;
-        case 'XL Locker':
-          lockers.layoutClass = 'xlLockerBlock gridSterBlock';
-          break;
-      }
-      let baseheight=100
-      const extraHeight = (lockers.rows-1) * 25
+      lockers.layoutClass = this.getLayoutClass(lockers.lockerName)
+      let baseheight = 100
+      const extraHeight = (lockers.rows - 1) * 25
       const finalHeight = baseheight + extraHeight;
-      lockers.cssHeight = finalHeight+'px'
+      lockers.cssHeight = finalHeight + 'px'
       lockers.status = 'b-green';
     });
-    
-  }
 
-  drag(_esa: any, itemName: string, item:any): void {
+  }
+  getLayoutClass(lockerName: any) {
+    let layoutClass = ''
+    switch (lockerName) {
+      case 'Kiosk':
+        layoutClass = 'kisoskBlock gridSterBlock';
+        break;
+      case 'Rent Seller':
+        layoutClass = 'rentSellerBlock gridSterBlock';
+        break;
+      case 'Small Locker':
+        layoutClass = 'smLockerBlock gridSterBlock';
+        break;
+      case 'Med Locker':
+        layoutClass = 'mdLockerBlock gridSterBlock';
+        break;
+      case '"Large Locker':
+        layoutClass = 'lgLockerBlock gridSterBlock';
+        break;
+      case 'XL Locker':
+        layoutClass = 'xlLockerBlock gridSterBlock';
+        break;
+    }
+    return layoutClass;
+  }
+  convertData(data: any) {
+    let result: any = []
+    data.forEach((element: { lockersList: any[]; }) => {
+      element.lockersList.forEach((lockers: any) => {
+        result.push({
+          x: lockers.xCoordinate, y: lockers.yCoordinate, cols: lockers.width,
+          rows: lockers.height, layoutClass: this.getLayoutClass(lockers.lockerNumber),
+          lockerNumber: lockers.lockerNumber, isRail: lockers.isRail,
+          lockerStatusId: lockers.lockerStatusId, lockerSizeId: lockers.lockerSizeId,
+          lockerId: lockers.lockerId,
+          lockerName: lockers.lockerName
+        })
+      });
+    });
+  }
+  drag(_esa: any, itemName: string, item: any): void {
     sessionStorage.setItem('box', itemName)
-    if(itemName==='templates')
-    sessionStorage.setItem('contentData', JSON.stringify(item.lockersList))
+    if (itemName === 'templates')
+    console.log('draggerd',item.lockersList)
+      sessionStorage.setItem('contentData', JSON.stringify(item.lockersList))
     console.log('dragged', _esa)
 
   }

@@ -14,11 +14,11 @@
 <!-- Toolbar -->
 <div class="toolbar" role="banner" >
   <div class="d-flex height-full">
-    <div class="col-sm-10 height-full" style="margin: 5px;">
+    <div class="col-sm-10 grid-Height-contanainer" style="margin: 5px;">
       <!--<app-gridlayout class=""></app-gridlayout>-->
       <app-grid-sizes [parentSubject]="parentSubject" ></app-grid-sizes>
     </div>
-    <div class="col-sm-2 text-center"> 
+    <div class="col-sm-2 text-center  rightSideContainer"> 
       <app-boxlayout (templateData)="loadTemplate($event)"></app-boxlayout>
     </div>
     

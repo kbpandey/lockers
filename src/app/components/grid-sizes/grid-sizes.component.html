@@ -7,7 +7,7 @@
     <gridster-item [item]="item" [ngClass]="item.layoutClass" *ngFor="let item of dashboard" >
       <div *ngIf="item.status" class="lockerStatus" [ngClass]="item.status" ></div>
       <div *ngIf="item.status"><button (click)="editButton(item, editContent)">E</button></div>
-      <p class="lockerNumber">{{item.lockerNumber}}</p>
+      <p *ngIf="item.status" class="lockerNumber">{{item.lockerNumber}}</p>
     </gridster-item>
   </gridster>
   <div class="infoBlock">
