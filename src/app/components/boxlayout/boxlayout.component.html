@@ -5,70 +5,20 @@
 
   </div>
   <div class="lockersContainer" *ngIf="displayTemplates==='lockers'  else templatesData">
-    <div class="d-flex">
-      <div class="kisosk draggableElement" draggable="true" (dragstart)="drag($event, 'kisosk', {})">
-      </div>
-      <div class="atmMachine draggableElement" draggable="true" (dragstart)="drag($event, 'rentSeller', {})">
-      </div>
-    </div>
-    <div class="d-flex">
-      <div class="draggableElementText">
-        Kiosk
-      </div>
-      <div class="draggableElementText">
-        Rent Seller
-      </div>
-    </div>
-    <div class="d-flex">
-      <div class="smLocker locker-border lockers draggableElement" draggable="true"
-        (dragstart)="drag($event , 'smlocker' , {})">
-        <div class="lockerStatus b-white"></div>
-      </div>
-      <div class="mdLocker locker-border lockers draggableElement" draggable="true"
-        (dragstart)="drag($event, 'mdLocker', {})">
-        <div class="lockerStatus b-red"></div>
-      </div>
-    </div>
-    <div class="d-flex">
-      <div class="draggableElementText">
-        Small Locker
-        <p>10 x 10 x 15.25</p>
-      </div>
-      <div class="draggableElementText">
-        Med Locker
-        <p>18 x 18 x 15.25</p>
-      </div>
-    </div>
-    <div class="d-flex">
-      <div class="lgLocker locker-border lockers draggableElement" draggable="true"
-        (dragstart)="drag($event, 'lgLocker', {})">
-        <div class="lockerStatus b-green"></div>
-      </div>
-      <div class="xlLocker locker-border lockers draggableElement" draggable="true"
-        (dragstart)="drag($event, 'xlLocker' ,{})">
-        <div class="lockerStatus b-yellow"></div>
-      </div>
-    </div>
-    <div class="d-flex">
-      <div class="draggableElementText">
-        Large Locker
-        <p>24 x 24 x 15.25</p>
-      </div>
-      <div class="draggableElementText">
-        XL Locker
-        <p>30 x 30 x 15.25</p>
-      </div>
-    </div>
-    <div *ngFor="let user of lockersLists; index as i; first as isFirst" style="width: 50%; display: inline-block;">
-      <div class="locker-border lockers draggableElement"  [ngClass]="user.layoutClass" [style.height.px]="getHeight(user.rows)" draggable="true"
-        (dragstart)="drag($event , 'smlocker', user)">
-        <div class="lockerStatus b-white"></div>
-      </div>
-      <div class="draggableElementText">
-        {{user.lockerName}}
-        <p>30 x 30 x 15.25</p>
+    <div *ngFor="let locker of lockersLists; index as i; first as isFirst" style="width: 50%; display: inline-block;">
+        <div *ngIf="(locker.lockerTypeId==1)" class="kisosk draggableElement" draggable="true" (dragstart)="drag($event, 'kisosk', {})">
         </div>
-    </div>
+        <div *ngIf="(locker.lockerTypeId==2)" class="atmMachine draggableElement" draggable="true" (dragstart)="drag($event, 'rentSeller', {})">
+        </div>
+        <div *ngIf="(locker.lockerTypeId==0)" class="locker-border lockers draggableElement"  [ngClass]="locker.layoutClass" [style.height.px]="locker.cssHeight" draggable="true"
+          (dragstart)="drag($event , 'locker', locker)">
+          <div class="lockerStatus b-white"></div>
+        </div>
+        <div class="draggableElementText">
+          {{locker.lockerName}}
+          <p>{{locker.lockerSizeDispaly}}</p>
+        </div>
+      </div>
   </div>
   <ng-template #templatesData>
     <!-- <div class="d-flex">
@@ -81,7 +31,6 @@
       <div class="draggableElementText">
         Sample Template 1
         <p>76 x 18 x 15.25</p>
-        <button class="btn btn-primary" (click)="loadTemplate()"> Load Template</button>
       </div>
       <div class="draggableElementText">
         Sample Template 2
@@ -96,7 +45,8 @@
       <div class="draggableElementText">
         {{user.templateName}}
         <p>Created On 31/05/2021</p>
-        </div>
+        <button class="btn btn-primary" (click)="loadTemplate()"> Load Template</button>
+      </div>
     </div>
     
   </ng-template>

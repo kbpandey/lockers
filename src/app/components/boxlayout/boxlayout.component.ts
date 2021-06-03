@@ -27,10 +27,8 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
 
     this.lockersLists.forEach((lockers: any) => {
       lockers.layoutClass = this.getLayoutClass(lockers)
-      let baseheight = 100
-      const extraHeight = (lockers.rows - 1) * 25
-      const finalHeight = baseheight + extraHeight;
-      lockers.cssHeight = finalHeight + 'px'
+      lockers.cssHeight = this.getHeight(lockers)
+      lockers.lockerSizeDispaly = `${lockers.width} x ${lockers.height} x ${lockers.depth}` 
       lockers.status = 'b-green';
     });
 
@@ -46,14 +44,14 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
         break;
       case 0:
         layoutClass = 'lockerBlock gridSterBlock';
-       
         break
     }
     return layoutClass;
   }
+
   getHeight(rows:any) {
     let baseheight = 100
-    const extraHeight = (rows - 1) * 25
+    const extraHeight = (rows.height / 10) * 20;
     const finalHeight = baseheight + extraHeight;
     return finalHeight;
   }
@@ -87,15 +85,18 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
   }
   drag(_esa: any, itemName: string, item: any): void {
     sessionStorage.setItem('box', itemName)
-    if (itemName === 'templates')
+    if (itemName === 'templates') {
       console.log('draggerd', item.lockersList)
-    sessionStorage.setItem('contentData', JSON.stringify(item.lockersList))
+      sessionStorage.setItem('contentData', JSON.stringify(item.lockersList))
+    } else {
+      sessionStorage.setItem('contentData', JSON.stringify(item))
+    }
     console.log('dragged', _esa)
-
   }
   displayTemplateLockers(displayType: string) {
     this.displayTemplates = displayType
   }
+  
   loadTemplate() {
     let dataStores = [{ x: 0, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' },
     { x: 1, y: 0, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' },
@@ -121,6 +122,4 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
     console.log(dataStores.length)
     this.templateData.emit(dataStores)
   }
-
-
 }

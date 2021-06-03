@@ -3,6 +3,7 @@ export class LockerSizes {
     height: number | undefined;
     width: number| undefined;
     lockerName: string| undefined;
+    depth: number | undefined;
     lockerTypeId: number | undefined;  // This denotes whether Locker or Rail. If 0 locker else Rail.
 }
 

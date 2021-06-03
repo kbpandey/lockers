@@ -13,50 +13,19 @@ import { Subject } from 'rxjs';
 export class GridSizesComponent implements OnInit {
   @Input()  parentSubject!: Subject<any>;
   @Output() savetTemplateClick = new EventEmitter<any>();
+  standardSizes:number = 10
   templateName:string = '';
   templates:[] = [];
   savedTemplates:any = []
   tempStatus:string = '';
   tempLockerNumber:number = 0
   dashboard: Array<GridsterItem> = [];
-  minColums: number = 15;
-  maxColumns: number = 15;
-  minRows: number = 15;
-  maxRows: number = 15;
+  minColums: number = 10;
+  maxColumns: number = 10;
+  minRows: number = 10;
+  maxRows: number = 10;
   selectedItem: any = []
   options: GridsterConfig = {
-    displayGrid: DisplayGrid.Always,
-    enableEmptyCellClick: false,
-    enableEmptyCellContextMenu: false,
-    enableEmptyCellDrop: true,
-    enableEmptyCellDrag: false,
-    enableOccupiedCellDrop: false,
-    emptyCellDropCallback: this.emptyCellClick.bind(this),
-    emptyCellClickCallback: this.emptyCellClick.bind(this),
-    emptyCellContextMenuCallback: this.emptyCellClick.bind(this),
-    emptyCellDragCallback: this.emptyCellClick.bind(this),
-    pushItems: true,
-    draggable: {
-      enabled: true
-    },
-    resizable: {
-      enabled: false
-    },
-    minCols: this.minColums,
-    maxCols: this.maxColumns,
-    minRows: this.minRows,
-    maxRows: this.maxRows,
-    maxItemCols: 15,
-    minItemCols: 1,
-    maxItemRows: 15,
-    minItemRows: 1,
-    maxItemArea: 15,
-    minItemArea: 1,
-    defaultItemCols: 1,
-    defaultItemRows: 1,
-    margin: 10,
-    outerMargin: false,
-    disablePushOnDrag: true,
   };
   constructor(private modalService: NgbModal) { }
   ngOnInit(): void {
@@ -82,17 +51,18 @@ export class GridSizesComponent implements OnInit {
       maxCols: this.maxColumns,
       minRows: this.minRows,
       maxRows: this.maxRows,
-      maxItemCols: 10,
+      maxItemCols: this.maxColumns,
       minItemCols: 1,
-      maxItemRows: 10,
+      maxItemRows: this.maxColumns,
       minItemRows: 1,
-      maxItemArea: 10,
+      maxItemArea: 1000,
       minItemArea: 1,
       defaultItemCols: 1,
       defaultItemRows: 1,
       margin: 10,
       outerMargin: false,
       disablePushOnDrag: true,
+      disableAutoPositionOnConflict: true
     };
     this.dashboard = [
 
@@ -269,6 +239,7 @@ export class GridSizesComponent implements OnInit {
         cols: lockers.width,
         rows: lockers.height,
         layoutClass: this.getLayoutClass(lockers),
+        cssHeight: this.getHeight(lockers),
         lockerNumber: lockers.lockerNumber ? lockers.lockerNumber : 0,
         isRail: lockers.isRail ? true : false,
         status: this.getLockerStatus(lockers.lockerStatusId),
@@ -280,6 +251,7 @@ export class GridSizesComponent implements OnInit {
     return result;
   }
   getLayoutClass(lockers: any) {
+    debugger;
     let layoutClass = ''
     switch (lockers.typeId) {
       case 1:
@@ -290,35 +262,47 @@ export class GridSizesComponent implements OnInit {
         break;
       case 0:
         layoutClass = 'lockerBlock gridSterBlock';
-        let baseheight = 100
-        const extraHeight = (lockers.rows - 1) * 25
-        const finalHeight = baseheight + extraHeight;
-        lockers.cssHeight = finalHeight + 'px';
-        break
+      break
     }
     return layoutClass;
   }
+
+  getHeight(rows:any) {
+    let baseheight = 100
+    const extraHeight = (rows.height / 10) * 20;
+    const finalHeight = baseheight + extraHeight;
+    return finalHeight;
+  }
+
   getLockerStatus(status: any) {
     const statusArray = ['b-green', 'b-yellow', 'b-red', 'b-grey']
     return statusArray[status]
   }
   newWidgetCallback(event: any, item: any): any {
     // do stuff / save to server / etc
+    let datas: any;
     let deviceType = sessionStorage.getItem('box')
+    datas = sessionStorage.getItem('contentData')
     if (deviceType === 'templates') {
-      let datas: any = sessionStorage.getItem('contentData')
       console.log('parsewda', JSON.parse(datas))
       this.dashboard = this.covertedToGridCompat(JSON.parse(datas))
+    }  else {
+      datas = JSON.parse(datas);
     }
+
     switch (deviceType) {
       case 'kisosk':
-        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock', });
+        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'kisoskBlock gridSterBlock', });
         break;
       case 'rentSeller':
-        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: 10, layoutClass: 'rentSellerBlock gridSterBlock' });
+        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'rentSellerBlock gridSterBlock' });
         break;
-      case 'smlocker':
-        this.dashboard.push({ x: item.x, y: item.y, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
+      case 'locker':
+         let width = 1
+         const lockerWidth = datas.width / this.standardSizes;
+         width = Math.round(( lockerWidth > width) ? lockerWidth : width);
+         const lockerHeight = Math.round((datas.height / this.standardSizes) * 2);
+         this.dashboard.push({ x: item.x, y: item.y, cols: width, rows: lockerHeight, layoutClass: 'lockerBlock gridSterBlock', status: 'b-yellow' });
         break;
       case 'mdLocker':
         this.dashboard.push({ x: item.x, y: item.y, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
