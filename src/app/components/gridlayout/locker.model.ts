@@ -21,6 +21,7 @@ export class LockerLayout{
 export class LockersList {
    lockerId: number | undefined;
    lockerNumber: number | undefined;
+   hardwareNumber: number | undefined;
    xCoordinate: number | undefined;
    yCoordinate: number | undefined;
    lockerSizeId: number | undefined;

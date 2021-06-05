@@ -72,6 +72,7 @@ export class BoxlayoutService {
           {
             "lockerId": 1,
             "lockerNumber": 0,
+            "hardwareNumber": 1,
             "xCoordinate": 1,
             "yCoordinate": 10,
             "lockerSizeId": 1,
@@ -83,6 +84,7 @@ export class BoxlayoutService {
           {
             "lockerId": 2,
             "lockerNumber": 0,
+            "hardwareNumber": 200,
             "xCoordinate": 2,
             "yCoordinate": 1,
             "lockerSizeId": 3,
@@ -100,6 +102,7 @@ export class BoxlayoutService {
           {
             "lockerId": 1,
             "lockerNumber": 0,
+            "hardwareNumber": 1000,
             "xCoordinate": 1,
             "yCoordinate": 10,
             "lockerSizeId": 1,
@@ -111,6 +114,7 @@ export class BoxlayoutService {
           {
             "lockerId": 2,
             "lockerNumber": 0,
+            "hardwareNumber": 3000,
             "xCoordinate": 2,
             "yCoordinate": 1,
             "lockerSizeId": 3,

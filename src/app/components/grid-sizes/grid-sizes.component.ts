@@ -17,8 +17,9 @@ export class GridSizesComponent implements OnInit {
   templateName:string = '';
   templates:[] = [];
   savedTemplates:any = []
-  tempStatus:string = '';
+  tempStatus:string = 'b-green';
   tempLockerNumber:number = 0
+  hardwareNumber:number = 0
   dashboard: Array<GridsterItem> = [];
   minColums: number = 10;
   maxColumns: number = 10;
@@ -61,8 +62,7 @@ export class GridSizesComponent implements OnInit {
       defaultItemRows: 1,
       margin: 10,
       outerMargin: false,
-      disablePushOnDrag: true,
-      disableAutoPositionOnConflict: true
+      disablePushOnDrag: true
     };
     this.dashboard = [
 
@@ -100,6 +100,7 @@ export class GridSizesComponent implements OnInit {
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
   onChange(data: any) {
+    debugger;
     switch (data.target.value) {
       case 'Available':
         console.log(data.target.value)
@@ -120,10 +121,15 @@ export class GridSizesComponent implements OnInit {
     }
 
   }
-  onKeyup(data: any) {
-
+  
+  onLockerNumber(data: any) {
     this.tempLockerNumber = data.target.value
   }
+
+  onHardWareNumber(data: any) {
+    this.hardwareNumber = data.target.value
+  }
+
   saveKeyUp(data: any) {
     this.templateName = data.target.value;
   }
@@ -133,19 +139,22 @@ export class GridSizesComponent implements OnInit {
     this.dashboard.splice(this.dashboard.indexOf(item), 1);
   }
   editButton(item: any, content: any) {
+    debugger;
     this.selectedItem = item
+    this.tempLockerNumber = item.lockerNumber
+    this.hardwareNumber = item.hardwareNumber
     this.modalService.open(content, { size: 'sm' });
   }
   closeEditPanel(selectedData: any) {
+    debugger;
     console.log('seletedData', selectedData, this.dashboard)
 
     this.selectedItem.status = this.tempStatus;
     this.selectedItem.lockerNumber = this.tempLockerNumber
+    this.selectedItem.hardwareNumber = this.hardwareNumber
     this.dashboard.forEach((element: GridsterItem, index) => {
       console.log(element)
-      debugger
       if (selectedData.x === element.x && selectedData.y === element.y) {
-        debugger
         this.dashboard[index] = selectedData;
       }
     });
@@ -189,7 +198,6 @@ export class GridSizesComponent implements OnInit {
     this.modalService.dismissAll()
   }
   convertToDbData(data: any) {
-    debugger
     let result: any = []
     this.dashboard.forEach(lockers => {
       result.push({
@@ -199,11 +207,12 @@ export class GridSizesComponent implements OnInit {
         height: lockers.rows,
         layoutClass: lockers.layoutClass,
         lockerNumber: lockers.lockerNumber,
+        hardwareNumber: lockers.hardwareNumber,
         isRail: lockers.isRail,
         lockerStatusId: lockers.status ? this.convertToDbStatus(lockers.status) : undefined,
         lockerSizeId: lockers.lockerSizeId,
         lockerId: lockers.lockerId,
-        typeId: lockers.typeId
+        typeId: lockers.lockerTypeId
       })
     });
     return result
@@ -217,7 +226,7 @@ export class GridSizesComponent implements OnInit {
     let counter = 0;
     let clsName = 'singleRail'
     this.dashboard.forEach((lockers) => {
-      if (lockers.layoutClass === 'kisoskBlock gridSterBlock' || lockers.layoutClass === 'rentSellerBlock gridSterBlock') {
+      if (lockers.layoutClass === 'kioskBlock gridSterBlock' || lockers.layoutClass === 'rentSellerBlock gridSterBlock') {
         counter = counter + 1
       }
     })
@@ -241,6 +250,7 @@ export class GridSizesComponent implements OnInit {
         layoutClass: this.getLayoutClass(lockers),
         cssHeight: this.getHeight(lockers),
         lockerNumber: lockers.lockerNumber ? lockers.lockerNumber : 0,
+        hardwareNumber: lockers.hardwareNumber ? lockers.hardwareNumber : 0,
         isRail: lockers.isRail ? true : false,
         status: this.getLockerStatus(lockers.lockerStatusId),
         lockerSizeId: lockers.lockerSizeId ? lockers.lockerSizeId : 1,
@@ -251,11 +261,10 @@ export class GridSizesComponent implements OnInit {
     return result;
   }
   getLayoutClass(lockers: any) {
-    debugger;
     let layoutClass = ''
     switch (lockers.typeId) {
       case 1:
-        layoutClass = 'kisoskBlock gridSterBlock';
+        layoutClass = 'kioskBlock gridSterBlock';
         break;
       case 2:
         layoutClass = 'rentSellerBlock gridSterBlock';
@@ -292,75 +301,17 @@ export class GridSizesComponent implements OnInit {
 
     switch (deviceType) {
       case 'kisosk':
-        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'kisoskBlock gridSterBlock', });
+        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'kioskBlock gridSterBlock', lockerTypeId:1});
         break;
       case 'rentSeller':
-        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'rentSellerBlock gridSterBlock' });
+        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'rentSellerBlock gridSterBlock', lockerTypeId:2 });
         break;
       case 'locker':
          let width = 1
          const lockerWidth = datas.width / this.standardSizes;
          width = Math.round(( lockerWidth > width) ? lockerWidth : width);
          const lockerHeight = Math.round((datas.height / this.standardSizes) * 2);
-         this.dashboard.push({ x: item.x, y: item.y, cols: width, rows: lockerHeight, layoutClass: 'lockerBlock gridSterBlock', status: 'b-yellow' });
-        break;
-      case 'mdLocker':
-        this.dashboard.push({ x: item.x, y: item.y, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        break;
-      case 'lgLocker':
-        this.dashboard.push({ x: item.x, y: item.y, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        break;
-      case 'xlLocker':
-        this.dashboard.push({ x: item.x, y: item.y, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow' });
-        break;
-      case 'sampleTemplate1':
-        this.dashboard = [{ x: 7, y: 4, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green', lockerSizeId: 1, lockerNumber: 123456, }
-          , { x: 6, y: 2, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green', lockerSizeId: 1, lockerNumber: 123456, }
-          , { x: 5, y: 5, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, }
-          , { x: 5, y: 3, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 7, y: 0, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 1, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 4, y: 0, cols: 1, rows: 10, layoutClass: 'rentSellerBlock gridSterBlock', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 3, y: 0, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 9, y: 5, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 9, y: 0, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 8, y: 0, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 6, y: 0, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 8, y: 5, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 7, y: 8, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 5, y: 0, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 6, y: 6, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 5, y: 7, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 2, y: 0, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 2, y: 5, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 3, y: 5, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 3, y: 3, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 0, y: 5, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, },
-        { x: 0, y: 0, cols: 1, rows: 5, layoutClass: 'xlLockerBlock gridSterBlock', status: 'b-yellow', lockerSizeId: 1, lockerNumber: 123456, }]
-        break;
-      case 'sampleTemplate2':
-        this.dashboard = []
-        this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' });
-        this.dashboard.push({ x: 1, y: 0, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 1, y: 2, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 1, y: 4, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 1, y: 6, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 1, y: 8, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 2, y: 0, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 2, y: 2, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 2, y: 5, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 2, y: 8, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 3, y: 0, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 3, y: 3, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 3, y: 6, cols: 1, rows: 3, layoutClass: 'mdLockerBlock gridSterBlock', status: 'b-red' });
-        this.dashboard.push({ x: 4, y: 0, cols: 1, rows: 10, layoutClass: 'rentSellerBlock gridSterBlock' });
-        this.dashboard.push({ x: 5, y: 0, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        this.dashboard.push({ x: 5, y: 4, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        this.dashboard.push({ x: 5, y: 8, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 6, y: 0, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        this.dashboard.push({ x: 6, y: 4, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' });
-        this.dashboard.push({ x: 6, y: 8, cols: 1, rows: 4, layoutClass: 'lgLockerBlock gridSterBlock', status: 'b-green' });
-        this.dashboard.push({ x: 7, y: 0, cols: 1, rows: 10, layoutClass: 'kisoskBlock gridSterBlock' });
+         this.dashboard.push({ x: item.x, y: item.y, cols: width, rows: lockerHeight, layoutClass: 'lockerBlock gridSterBlock', status: 'b-white', lockerTypeId:0 });
         break;
     }
     console.log(this.dashboard);

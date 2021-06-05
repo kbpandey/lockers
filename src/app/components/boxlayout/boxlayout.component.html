@@ -21,22 +21,6 @@
       </div>
   </div>
   <ng-template #templatesData>
-    <!-- <div class="d-flex">
-      <div class="kisosk draggableElement" draggable="true" (dragstart)="drag($event, 'sampleTemplate1', {})">
-      </div>
-      <div class="atmMachine draggableElement" draggable="true" (dragstart)="drag($event, 'sampleTemplate2',{})">
-      </div>
-    </div>
-    <div class="d-flex">
-      <div class="draggableElementText">
-        Sample Template 1
-        <p>76 x 18 x 15.25</p>
-      </div>
-      <div class="draggableElementText">
-        Sample Template 2
-        <p>76 x 18 x 15.25</p>
-      </div>
-    </div> -->
     <div *ngFor="let user of savedTemplates; index as i; first as isFirst" style="padding-top:10px;">
       <div class="templateClass"   draggable="true"
         (dragstart)="drag($event , 'templates', user)">

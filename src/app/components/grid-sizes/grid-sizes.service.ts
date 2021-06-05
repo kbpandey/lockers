@@ -15,6 +15,7 @@ export class GridSizesService {
         {
           "lockerId": 1,
           "lockerNumber": "Kiosk",
+          "hardwareNumber": "10000",
           "xCoordinate": 1,
           "yCoordinate": 2,
           "lockerSizeId": 3,
@@ -25,7 +26,8 @@ export class GridSizesService {
         },
         {
             "lockerId": 1,
-            "lockerNumber": "string",
+            "lockerNumber": "10",
+            "hardwareNumber": "20000",
             "xCoordinate": 1,
             "yCoordinate": 2,
             "lockerSizeId": 3,
