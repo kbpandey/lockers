@@ -8,14 +8,14 @@ import { BoxlayoutService } from './boxlayout.service'
 export class BoxlayoutComponent implements OnInit, OnChanges {
   displayTemplates: string = 'lockers';
 
-  @Input() updateType:string;
+  @Input() updateType: string;
   @Output() templateData = new EventEmitter<any>();
   lockersLists: any = []
-  savedTemplates:any = []
-  standardSizes:number = 10
+  savedTemplates: any = []
+  standardSizes: number = 10
   constructor() {
     this.updateType = "";
-   }
+  }
 
   ngOnInit(): void {
     const lockersData = new BoxlayoutService()
@@ -28,7 +28,8 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
     this.lockersLists.forEach((lockers: any) => {
       lockers.layoutClass = this.getLayoutClass(lockers)
       lockers.cssHeight = this.getHeight(lockers)
-      lockers.lockerSizeDispaly = `${lockers.width} x ${lockers.height} x ${lockers.depth}` 
+      lockers.cssWidth = this.getWidth(lockers)
+      lockers.lockerSizeDispaly = `${lockers.width} x ${lockers.height} x ${lockers.depth}`
       lockers.status = 'b-green';
     });
 
@@ -49,11 +50,17 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
     return layoutClass;
   }
 
-  getHeight(rows:any) {
+  getHeight(rows: any) {
     let baseheight = 100
     const extraHeight = (rows.height / 10) * 20;
     const finalHeight = baseheight + extraHeight;
     return finalHeight;
+  }
+  getWidth(lockers: any) {
+    const baseWidth = 100;
+    const extraWidth = (lockers.width / 10) * 20
+    const finalWidth = baseWidth + extraWidth;
+    return finalWidth
   }
 
   convertData(data: any) {
@@ -62,9 +69,9 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
       element.lockersList.forEach((lockers: any) => {
         result.push({
           x: lockers.xCoordinate,
-          y: lockers.yCoordinate, 
+          y: lockers.yCoordinate,
           cols: lockers.width / this.standardSizes,
-          rows: lockers.height / this.standardSizes, 
+          rows: lockers.height / this.standardSizes,
           layoutClass: this.getLayoutClass(lockers),
           lockerNumber: lockers.lockerNumber, isRail: lockers.isRail,
           lockerStatusId: lockers.lockerStatusId, lockerSizeId: lockers.lockerSizeId,
@@ -74,8 +81,8 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
       });
     });
   }
-  loadTemplates(){
-    let templateDataS:any = sessionStorage.getItem('savedTemplate')!==null? sessionStorage.getItem('savedTemplate') : [];
+  loadTemplates() {
+    let templateDataS: any = sessionStorage.getItem('savedTemplate') !== null ? sessionStorage.getItem('savedTemplate') : [];
     this.savedTemplates = templateDataS.length > 0 ? JSON.parse(templateDataS) : []
   }
 
@@ -96,7 +103,7 @@ export class BoxlayoutComponent implements OnInit, OnChanges {
   displayTemplateLockers(displayType: string) {
     this.displayTemplates = displayType
   }
-  
+
   loadTemplate() {
     // let dataStores = [{ x: 0, y: 0, cols: 1, rows: 10, layoutClass: 'kioskBlock gridSterBlock' },
     // { x: 1, y: 0, cols: 1, rows: 2, layoutClass: 'smLockerBlock gridSterBlock', status: 'b-yellow' },

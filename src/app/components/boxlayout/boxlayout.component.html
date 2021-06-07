@@ -5,12 +5,12 @@
 
   </div>
   <div class="lockersContainer" *ngIf="displayTemplates==='lockers'  else templatesData">
-    <div *ngFor="let locker of lockersLists; index as i; first as isFirst" style="width: 50%; display: inline-block;">
+    <div *ngFor="let locker of lockersLists; index as i; first as isFirst" class="lockerContainerBox">
         <div *ngIf="(locker.lockerTypeId==1)" class="kisosk draggableElement" draggable="true" (dragstart)="drag($event, 'kisosk', {})">
         </div>
         <div *ngIf="(locker.lockerTypeId==2)" class="atmMachine draggableElement" draggable="true" (dragstart)="drag($event, 'rentSeller', {})">
         </div>
-        <div *ngIf="(locker.lockerTypeId==0)" class="locker-border lockers draggableElement"  [ngClass]="locker.layoutClass" [style.height.px]="locker.cssHeight" draggable="true"
+        <div *ngIf="(locker.lockerTypeId==0)" class="locker-border lockers draggableElement"  [ngClass]="locker.layoutClass" [style.height.px]="locker.cssHeight" [style.width.px]="locker.cssWidth" draggable="true"
           (dragstart)="drag($event , 'locker', locker)">
           <div class="lockerStatus b-white"></div>
         </div>
