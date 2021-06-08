@@ -14,13 +14,17 @@
 <!-- Toolbar -->
 <div class="toolbar" role="banner" >
   <div class="d-flex height-full">
-    <div class="col-lg-9 col-md-9 col-xl-10 grid-Height-contanainer" style="margin: 5px;" style="overflow: auto;">
+    <div class="col-lg-9 col-md-9 col-xl-9 grid-Height-contanainer" style="margin: 5px;">
       <!--<app-gridlayout class=""></app-gridlayout>-->
       <app-grid-sizes [parentSubject]="parentSubject" (savetTemplateClick)="saveTemplateClicked()" style="overflow: auto;"></app-grid-sizes>
     </div>
-    <div class="col-lg-3 col-md-3 col-xl-2 text-center  rightSideContainer"> 
+    <div class="col-lg-3 col-md-3 col-xl-3 text-center rightSideContainer"> 
       <app-boxlayout (templateData)="loadTemplate($event)"  [updateType]="updatedValue"></app-boxlayout>
     </div>
+    
+  </div>
+  <div class="col-xl-9">
+    <app-gridlayout></app-gridlayout>
   </div>
 </div>
 

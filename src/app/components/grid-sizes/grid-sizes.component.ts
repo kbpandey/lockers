@@ -1,4 +1,4 @@
-import { Input, ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, EventEmitter, Output  } from '@angular/core';
+import { Input, ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation, EventEmitter, Output } from '@angular/core';
 
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,32 +11,35 @@ import { Subject } from 'rxjs';
   encapsulation: ViewEncapsulation.None
 })
 export class GridSizesComponent implements OnInit {
-  @Input()  parentSubject!: Subject<any>;
+  @Input() parentSubject!: Subject<any>;
   @Output() savetTemplateClick = new EventEmitter<any>();
-  standardSizes:number = 10
-  templateName:string = '';
-  templates:[] = [];
-  savedTemplates:any = []
-  tempStatus:string = 'b-green';
-  tempLockerNumber:number = 0
-  hardwareNumber:number = 0
+  standardSizes: number = 10
+  templateName: string = '';
+  templates: [] = [];
+  savedTemplates: any = []
+  tempStatus: string = 'b-green';
+  tempLockerNumber: number = 0
+  hardwareNumber: number = 0
   dashboard: Array<GridsterItem> = [];
   minColums: number = 10;
   maxColumns: number = 10;
   minRows: number = 10;
-  maxRows: number = 10;
+  maxRows: number = 10  ;
   selectedItem: any = []
   options: GridsterConfig = {
   };
   constructor(private modalService: NgbModal) { }
   ngOnInit(): void {
     this.options = {
+      gridType: 'fixed',
+      fixedColWidth: 180, // fixed col width for gridType: 'fixed'
+      fixedRowHeight: 100, // fixed row height for gridType: 'fixed'
       displayGrid: DisplayGrid.Always,
       enableEmptyCellClick: false,
       enableEmptyCellContextMenu: false,
       enableEmptyCellDrop: true,
       enableEmptyCellDrag: false,
-      enableOccupiedCellDrop: false,
+      enableOccupiedCellDrop: true,
       emptyCellDropCallback: this.emptyCellClick.bind(this),
       emptyCellClickCallback: this.emptyCellClick.bind(this),
       emptyCellContextMenuCallback: this.emptyCellClick.bind(this),
@@ -121,7 +124,7 @@ export class GridSizesComponent implements OnInit {
     }
 
   }
-  
+
   onLockerNumber(data: any) {
     this.tempLockerNumber = data.target.value
   }
@@ -230,9 +233,9 @@ export class GridSizesComponent implements OnInit {
         counter = counter + 1
       }
     })
-    if(counter <=1){
+    if (counter <= 1) {
       clsName = '../../../assets/singlerail.jpeg'
-    } else if(counter ===2){
+    } else if (counter === 2) {
       clsName = '../../../assets/dualrail.jpeg'
     } else {
       clsName = '../../../assets/triplerail.jpeg'
@@ -271,12 +274,12 @@ export class GridSizesComponent implements OnInit {
         break;
       case 0:
         layoutClass = 'lockerBlock gridSterBlock';
-      break
+        break
     }
     return layoutClass;
   }
 
-  getHeight(rows:any) {
+  getHeight(rows: any) {
     let baseheight = 100
     const extraHeight = (rows.height / 10) * 20;
     const finalHeight = baseheight + extraHeight;
@@ -295,23 +298,23 @@ export class GridSizesComponent implements OnInit {
     if (deviceType === 'templates') {
       console.log('parsewda', JSON.parse(datas))
       this.dashboard = this.covertedToGridCompat(JSON.parse(datas))
-    }  else {
+    } else {
       datas = JSON.parse(datas);
     }
 
     switch (deviceType) {
       case 'kisosk':
-        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'kioskBlock gridSterBlock', lockerTypeId:1});
+        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'kioskBlock gridSterBlock', lockerTypeId: 1 });
         break;
       case 'rentSeller':
-        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'rentSellerBlock gridSterBlock', lockerTypeId:2 });
+        this.dashboard.push({ x: item.x, y: 0, cols: 1, rows: this.maxRows, layoutClass: 'rentSellerBlock gridSterBlock', lockerTypeId: 2 });
         break;
       case 'locker':
-         let width = 1
-         const lockerWidth = datas.width / this.standardSizes;
-         width = Math.round(( lockerWidth > width) ? lockerWidth : width);
-         const lockerHeight = Math.round((datas.height / this.standardSizes) * 2);
-         this.dashboard.push({ x: item.x, y: item.y, cols: width, rows: lockerHeight, layoutClass: 'lockerBlock gridSterBlock', status: 'b-white', lockerTypeId:0 });
+        let width = 1
+        const lockerWidth = datas.width / this.standardSizes;
+        width = Math.round((lockerWidth > width) ? lockerWidth : width);
+        const lockerHeight = Math.round((datas.height / this.standardSizes) * 2);
+        this.dashboard.push({ x: item.x, y: item.y, cols: width, rows: lockerHeight, layoutClass: 'lockerBlock gridSterBlock', status: 'b-white', lockerTypeId: 0 });
         break;
     }
     console.log(this.dashboard);

@@ -10,10 +10,7 @@
       <p *ngIf="item.status" class="lockerNumber">{{item.lockerNumber}}</p>
     </gridster-item>
   </gridster>
-  <div class="infoBlock">
-    <span class="lockerStatusSpan b-green"></span> Avaiable <span class="lockerStatusSpan b-red"></span> Reserved  <span class="lockerStatusSpan b-yellow"></span> In Use  <span class="lockerStatusSpan b-grey"></span> Disabled 
-    <span class="float-end">Note : To remove lockers, please drag them out of the grid</span>
-  </div>
+  
   <div> <button class="btn btn-primary" (click)="saveDashboard(dashboard, SaveContent)">  Save</button></div>
 
   <!--Edit Modal-->
